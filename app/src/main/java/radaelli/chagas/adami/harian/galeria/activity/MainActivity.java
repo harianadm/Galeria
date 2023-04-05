@@ -1,6 +1,9 @@
 package radaelli.chagas.adami.harian.galeria.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -13,12 +16,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import radaelli.chagas.adami.harian.galeria.R;
+import radaelli.chagas.adami.harian.galeria.adapter.MyAdapter;
 import radaelli.chagas.adami.harian.galeria.model.MyItem;
 
 public class MainActivity extends AppCompatActivity {
 
     static int NEW_ITEM_REQUEST =1;
     List<MyItem> itens = new ArrayList<>();
+    MyAdapter myAdapter;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
@@ -33,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
                 myItem.photo = data.getData();
                 //e adiciona na lista de itens
                 itens.add(myItem);
+                //notificando o adapter e exibindo o novo itens
+                myAdapter.notifyItemInserted(itens.size()-1);
             }
         }
     }
@@ -53,5 +60,20 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(i, NEW_ITEM_REQUEST);
             }
         });
+        //obtendo o recycleView
+        RecyclerView rvItens = findViewById(R.id.rvItens);
+        //criando o adapter e setando no recycle view
+        myAdapter = new MyAdapter(this,itens);
+        rvItens.setAdapter(myAdapter);
+        //indicando que nao ha variacao de tamanho entre os itens da lista
+        rvItens.setHasFixedSize(true);
+        //criando um gerenciador de layout do tipo linear e setando no RecycleView
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        rvItens.setLayoutManager(layoutManager);
+        //criando um decorador para a lista, que é uma linha separando cada item
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rvItens.getContext(), DividerItemDecoration.VERTICAL);
+        //setando o decorador no RecycleView
+        rvItens.addItemDecoration(dividerItemDecoration);
     }
+
 }

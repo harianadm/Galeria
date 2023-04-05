@@ -83,10 +83,15 @@ public class NewItemActivity extends AppCompatActivity {
                 }
                 //setando uma intent que servira para enviar os dados
                 Intent i = new Intent();
+                //setando o uri dentro da intent
                 i.setData(photoSelected);
+                //setando o titulo na intent
                 i.putExtra("title", title);
+                //setando o descricao na intent
                 i.putExtra("description", description);
+                //indicando o resultado da activity
                 setResult(Activity.RESULT_OK,i);
+                //finalizando a activity
                 finish();
             }
         });
