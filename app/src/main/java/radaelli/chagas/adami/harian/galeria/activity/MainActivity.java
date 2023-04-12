@@ -21,7 +21,7 @@ import radaelli.chagas.adami.harian.galeria.model.MyItem;
 
 public class MainActivity extends AppCompatActivity {
 
-    static int NEW_ITEM_REQUEST =1;
+    static int NEW_ITEM_REQUEST = 1;
     List<MyItem> itens = new ArrayList<>();
     MyAdapter myAdapter;
 
