@@ -7,17 +7,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
 import radaelli.chagas.adami.harian.galeria.R;
 import radaelli.chagas.adami.harian.galeria.adapter.MyAdapter;
 import radaelli.chagas.adami.harian.galeria.model.MyItem;
+import radaelli.chagas.adami.harian.galeria.util.Util;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,7 +39,16 @@ public class MainActivity extends AppCompatActivity {
                 MyItem myItem = new MyItem();
                 myItem.title = data.getStringExtra("title");
                 myItem.description = data.getStringExtra("description");
-                myItem.photo = data.getData();
+                Uri selectedPhotoUri = data.getData();
+                // usando a funcao da classe util para carregar a imagem e guardar dentro de um bitmap
+                //e depois guardando o bitmap da imagem dentro de um objeto MyItem
+                try{
+                    Bitmap photo = Util.getBitmap(MainActivity.this, selectedPhotoUri, 100, 100);
+                    myItem.photo = photo;
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                itens.add(myItem);
                 //e adiciona na lista de itens
                 itens.add(myItem);
                 //notificando o adapter e exibindo o novo itens

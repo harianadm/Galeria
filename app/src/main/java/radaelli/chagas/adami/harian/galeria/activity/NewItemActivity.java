@@ -30,7 +30,7 @@ public class NewItemActivity extends AppCompatActivity {
         if (requestCode == PHOTO_PICKER_REQUEST) {
             //verificando se o resultCode é um codigo de sucesso
             if(resultCode == Activity.RESULT_OK){
-                photoSelected = data.getData();
+                    photoSelected = data.getData();
                 //obtendo o Uri da imagem escolhida
                 ImageView imgPhotoPreview = findViewById(R.id.imvPhotoPreview);
                 //setando o uri na imgPhotoPreview
