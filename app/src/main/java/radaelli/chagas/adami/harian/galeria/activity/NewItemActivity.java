@@ -2,6 +2,7 @@ package radaelli.chagas.adami.harian.galeria.activity;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -15,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import radaelli.chagas.adami.harian.galeria.R;
+import radaelli.chagas.adami.harian.galeria.model.NewItemActivityViewModel;
 
 public class NewItemActivity extends AppCompatActivity {
 
@@ -30,11 +32,14 @@ public class NewItemActivity extends AppCompatActivity {
         if (requestCode == PHOTO_PICKER_REQUEST) {
             //verificando se o resultCode é um codigo de sucesso
             if(resultCode == Activity.RESULT_OK){
-                    photoSelected = data.getData();
+                Uri photoSelected = data.getData();
                 //obtendo o Uri da imagem escolhida
                 ImageView imgPhotoPreview = findViewById(R.id.imvPhotoPreview);
                 //setando o uri na imgPhotoPreview
                 imgPhotoPreview.setImageURI(photoSelected);
+
+                NewItemActivityViewModel vm = new ViewModelProvider( this).get(NewItemActivityViewModel.class);
+                vm.setSelectPhotoLocation(photoSelected);
             }
         }
     }
@@ -42,6 +47,15 @@ public class NewItemActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_item);
+
+        NewItemActivityViewModel vm = new ViewModelProvider( this ).get(NewItemActivityViewModel.class);
+
+        Uri selectedPhotoLocation = vm.getSelectedPhotoLocation();
+        if(selectedPhotoLocation != null){
+            ImageView imvfotoPreview = findViewById(R.id.imvPhotoPreview);
+            imvfotoPreview.setImageURI(selectedPhotoLocation);
+        }
+
         //obtendo o img button
         ImageButton imgCl = findViewById(R.id.imbCl);
         //ouvidor de cliques
