@@ -21,28 +21,10 @@ import radaelli.chagas.adami.harian.galeria.model.NewItemActivityViewModel;
 public class NewItemActivity extends AppCompatActivity {
 
     static int PHOTO_PICKER_REQUEST = 1;
-    Uri photoSelected = null;
-
 
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){
-        super.onActivityResult(requestCode,resultCode,data);
-        // verificando se o requestCode é igual ao item com id photo_picker_request
-        if (requestCode == PHOTO_PICKER_REQUEST) {
-            //verificando se o resultCode é um codigo de sucesso
-            if(resultCode == Activity.RESULT_OK){
-                Uri photoSelected = data.getData();
-                //obtendo o Uri da imagem escolhida
-                ImageView imgPhotoPreview = findViewById(R.id.imvPhotoPreview);
-                //setando o uri na imgPhotoPreview
-                imgPhotoPreview.setImageURI(photoSelected);
 
-                NewItemActivityViewModel vm = new ViewModelProvider( this).get(NewItemActivityViewModel.class);
-                vm.setSelectPhotoLocation(photoSelected);
-            }
-        }
-    }
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -79,7 +61,11 @@ public class NewItemActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 //verificando se os campos estao preenchidos
-                if(photoSelected == null){
+
+                NewItemActivityViewModel vm = new ViewModelProvider( NewItemActivity.this ).get(NewItemActivityViewModel.class);
+                Uri selectedPhotoLocation = vm.getSelectedPhotoLocation();
+
+                if(selectedPhotoLocation == null){
                     Toast.makeText(NewItemActivity.this, "É necessário selecionar uma imagem!", Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -98,7 +84,7 @@ public class NewItemActivity extends AppCompatActivity {
                 //setando uma intent que servira para enviar os dados
                 Intent i = new Intent();
                 //setando o uri dentro da intent
-                i.setData(photoSelected);
+                i.setData(selectedPhotoLocation);
                 //setando o titulo na intent
                 i.putExtra("title", title);
                 //setando o descricao na intent
@@ -109,6 +95,24 @@ public class NewItemActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){
+        super.onActivityResult(requestCode,resultCode,data);
+        // verificando se o requestCode é igual ao item com id photo_picker_request
+        if (requestCode == PHOTO_PICKER_REQUEST) {
+            //verificando se o resultCode é um codigo de sucesso
+            if(resultCode == Activity.RESULT_OK){
+                Uri photoSelected = data.getData();
+                //obtendo o Uri da imagem escolhida
+                ImageView imgPhotoPreview = findViewById(R.id.imvPhotoPreview);
+                //setando o uri na imgPhotoPreview
+                imgPhotoPreview.setImageURI(photoSelected);
+
+                NewItemActivityViewModel vm = new ViewModelProvider( this).get(NewItemActivityViewModel.class);
+                vm.setSelectPhotoLocation(photoSelected);
+            }
+        }
     }
 
 }
